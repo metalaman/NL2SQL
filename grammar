@@ -1,0 +1,243 @@
+#
+# Grammar Rules(v0.2)
+#
+# Grammar Rules
+
+% start S
+S[SEM=?vp] -> VP[SEM=?vp]
+
+
+# SELECT * FROM TABLE FORMAT
+
+VP[TNS=PRES, SEM=<all x.?nn(x)>] -> 'show' NP[SEM=?nn, TYPE=table] | 'return' NP[SEM=?nn, TYPE=table] | 'show me' NP[SEM=?nn, TYPE=table] | 'tell me' NP[SEM=?nn, TYPE=table] | 'find' NP[SEM=?nn, TYPE=table]
+VP[SEM=<?vp(?pp)>] -> V[SEM=?vp, TYPE=simple] NP[SEM=?np, TYPE=records] PP[SEM=?pp, TYPE=table]
+
+
+# To be used for testing instead of the upper one.
+#VP[TNS=PRES, SEM=<all x.?nn(x)>] -> 'show' NP[SEM=?nn, TYPE=table] | 'return' NP[SEM=?nn, TYPE=table] | 'show' 'me' NP[SEM=?nn, TYPE=table] | 'tell' 'me' NP[SEM=?nn, TYPE=table] | 'find' NP[SEM=?nn, TYPE=table]
+
+
+# SELECT * FORMAT
+
+VP[SEM=<?vp(?np)(?pp)>] -> V[SEM=?vp] NP[SEM=?np, TYPE=table] PP[SEM=?pp]
+VP[SEM=<?vp(?pp)>] -> V[SEM=?vp] NP[SEM=?np, TYPE=records] PP[SEM=?pp, TYPE=wherecolumn]
+VP[SEM=<?vp(?pp1)(?pp)>] -> V[SEM=?vp] NP[SEM=?np, TYPE=records] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?pp1)(?pp)>] -> V[SEM=?vp] NP[SEM=?np, TYPE=records] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?pp1)(?pp)>] -> V[SEM=?vp] NP[SEM=?np, TYPE=records] PP[SEM=?pp, TYPE=table] PP[SEM=?pp1, TYPE=wherecolumn]
+VP[SEM=<?vp(?pp1)(?pp)>] -> V[SEM=?vp] NP[SEM=?np, TYPE=records] PP[SEM=?pp, TYPE=table] PP[SEM=?pp1, TYPE=date]
+VP[SEM=<?vp(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=records] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=wherecolumn]
+VP[SEM=<?vp(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=records] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=date]
+VP[SEM=<?vp(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=records] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=wherecolumn]
+VP[SEM=<?vp(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=records] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=date]
+#VP[SEM=<?vp(?pp)>] -> V[SEM=?vp] PP[SEM=?pp] 
+
+## LIMIT
+VP[SEM=<?vp(?pp)(?np)>] -> V[SEM=?vp] NP[SEM=?np, TYPE=limit] PP[SEM=?pp, TYPE=table]
+VP[SEM=<?vp(?pp1)((?pp & ?np))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=limit] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?pp1)((?pp & ?np))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=limit] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?pp1)((?pp & ?np))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=limit] PP[SEM=?pp, TYPE=table] PP[SEM=?pp1, TYPE=wherecolumn]
+VP[SEM=<?vp(?pp1)((?pp & ?np))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=limit] PP[SEM=?pp, TYPE=table] PP[SEM=?pp1, TYPE=date]
+VP[SEM=<?vp(?pp1)((?pp & ?pp2 & ?np))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=limit] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=wherecolumn]
+VP[SEM=<?vp(?pp1)((?pp & ?pp2 & ?np))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=limit] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=date]
+VP[SEM=<?vp(?pp1)((?pp & ?pp2 & ?np))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=limit] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=wherecolumn]
+VP[SEM=<?vp(?pp1)((?pp & ?pp2 & ?np))>] -> V[SEM=?vp] NP[SEM=?np, TYPE=limit] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=date]
+
+VP[SEM=<?vp(?adp)((?pp1 & ?np))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=limit] ADP[SEM=?adp] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=groupby]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?np))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=limit] ADP[SEM=?adp] PP[SEM=?pp, TYPE=groupby] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2 & ?np))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=limit] ADP[SEM=?adp] PP[SEM=?pp, TYPE=groupby] PP[SEM=?pp2, TYPE=orderby] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2 & ?pp3 & ?np))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=limit] ADP[SEM=?adp] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp2, TYPE=groupby] PP[SEM=?pp3, TYPE=orderby] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2 & ?np))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=limit] ADP[SEM=?adp] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp2, TYPE=groupby] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2 & ?np))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=limit] ADP[SEM=?adp] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=groupby]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2 & ?pp3 & ?np))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=limit] ADP[SEM=?adp] PP[SEM=?pp, TYPE=date] PP[SEM=?pp2, TYPE=groupby] PP[SEM=?pp3, TYPE=orderby] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2 & ?np))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=limit] ADP[SEM=?adp] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=groupby]
+
+# SELECT @some_columns FORMAT
+
+## AGGREGATION FORMAT
+VP[SEM=<?vp(?adp)(?pp)>] -> V[SEM=?vp, TYPE=selectsomenowhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)(?pp)>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp, TYPE=wherecolumn]
+VP[SEM=<?vp(?adp)(?pp1)(?pp)>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)(?pp)>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)(?pp)>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=table] PP[SEM=?pp1, TYPE=date]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=wherecolumn]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=date]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=wherecolumn]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=date]
+
+## GROUP BY FORMAT W/O ORDER BY
+
+VP[SEM=<?vp(?adp)(?pp1)>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=groupby]
+VP[SEM=<?vp(?adp)(?pp1)(?pp)>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=groupby] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=groupby]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=groupby]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp2, TYPE=groupby] PP[SEM=?pp1, TYPE=table]
+
+## GROUP BY FORMAT W/ ORDER BY
+
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=groupby] PP[SEM=?pp2, TYPE=orderby] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2 & ?pp3))>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp2, TYPE=groupby] PP[SEM=?pp3, TYPE=orderby] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?adp)(?pp1)((?pp & ?pp2 & ?pp3))>] -> V[SEM=?vp, TYPE=selectsomewhere] ADP[SEM=?adp] PP[SEM=?pp, TYPE=date] PP[SEM=?pp2, TYPE=groupby] PP[SEM=?pp3, TYPE=orderby] PP[SEM=?pp1, TYPE=table]
+
+## W/O AGGREGATION FORMAT
+
+VP[SEM=<?vp(?np)(?pp1)(?pp)>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=selectcolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp, TYPE=wherecolumn]
+VP[SEM=<?vp(?np)(?pp1)(?pp)>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=selectcolumn] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table]
+VP[SEM=<?vp(?np)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=selectcolumn] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=wherecolumn]
+VP[SEM=<?vp(?np)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=selectcolumn] PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=date]
+VP[SEM=<?vp(?np)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=selectcolumn] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=wherecolumn]
+VP[SEM=<?vp(?np)(?pp1)((?pp & ?pp2))>] -> V[SEM=?vp, TYPE=selectsomewhere] NP[SEM=?np, TYPE=selectcolumn] PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=table] PP[SEM=?pp2, TYPE=date]
+VP[SEM=<?vp(?np)(?pp)>] -> V[SEM=?vp, TYPE=selectsomenowhere] NP[SEM=?np, TYPE=selectcolumn] PP[SEM=?pp, TYPE=table]
+
+NP[SEM=<?nom>, TYPE=?type] -> NOM[SEM=?nom, TYPE=?type]
+NOM[SEM=<?nn>, TYPE=?type] -> NN[SEM=?nn, TYPE=?type]
+
+# LIMIT WITH 0 OFFSET
+
+NOM[SEM=<?propn(\x.LIMIT(x))>, TYPE=limit] -> PropN[SEM=?propn, TYPE=number] NN[SEM=?nn, TYPE=?type]
+NOM[SEM=<?propn(\x.LIMIT(x))>, TYPE=limit] -> ORD[TYPE=ordtop] PropN[SEM=?propn, TYPE=number] NN[SEM=?nn, TYPE=?type]
+
+
+#NOM[SEM=<?propn>] -> PropN[SEM=?propn] 									# Why commented?
+NOM[SEM=<?propn(?nn)>] -> NN[SEM=?nn, TYPE=wherecolumn] PropN[SEM=?propn]
+#NOM[SEM=<?nn>, TYPE=selectcolumn] -> NN[SEM=?nn, TYPE=selectcolumn]
+NOM[SEM=<(?nn & ?nom)>, TYPE=selectcolumn] -> NN[SEM=?nn, TYPE=selectcolumn] CONJ[] NOM[SEM=?nom, TYPE=selectcolumn]
+
+# AGGREGATION
+
+ADP[SEM=<?adj(?nn)>, TYPE=selectcolumn] -> ADJ[SEM=?adj] NN[SEM=?nn, TYPE=selectcolumn]
+ADP[SEM=<(?adj(?nn) & ?adp)>, TYPE=selectcolumn] -> ADJ[SEM=?adj] NN[SEM=?nn, TYPE=selectcolumn] CONJ[] ADP[SEM=?adp, TYPE=selectcolumn]
+
+PP[SEM=<?np>, TYPE=?type] -> P[SEM=?p] NP[SEM=?np, TYPE=?type]
+
+# GROUP BY PP
+
+PP[SEM=<?adv(?np)>, TYPE=groupby] -> P[SEM=?p] ADV[SEM=?adv, TYPE=groupby] NP[SEM=?np, TYPE=selectcolumn]
+
+# DATE PP
+
+PP[SEM=<?np(\x.date(date_column,greater,x))>, TYPE=date] -> P[TYPE=from] PropN[TYPE=date, SEM=?np]
+PP[SEM=<?np(\x.date(date_column,lesser,x))>, TYPE=date] -> P[TYPE=to] PropN[TYPE=date, SEM=?np]
+PP[SEM=<?np(\x.date(date_column,greater,x))>, TYPE=date] -> P[TYPE=from] NN[SEM=?nn, TYPE=wherecolumn] PropN[TYPE=date, SEM=?np]
+PP[SEM=<?np(\x.date(date_column,lesser,x))>, TYPE=date] -> P[TYPE=to] NN[SEM=?nn, TYPE=wherecolumn] PropN[TYPE=date, SEM=?np]
+PP[SEM=<?np(\x.date(date_column,equals,x))>, TYPE=date] -> P[TYPE=for] NN[SEM=?nn, TYPE=wherecolumn] PropN[TYPE=date, SEM=?np]
+PP[SEM=<?np(\x.date(date_column,equals,x))>, TYPE=date] -> P[TYPE=for] PropN[TYPE=date, SEM=?np]
+
+# MULTIPLE WHERE PP 
+
+PP[SEM=<?pp & ?pp1>, TYPE=wherecolumn] -> PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=wherecolumn]
+PP[SEM=<?pp & ?pp1>, TYPE=date] -> PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=date]
+PP[SEM=<?pp & ?pp1>, TYPE=date] -> PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=wherecolumn]
+PP[SEM=<?pp & ?pp1>, TYPE=date] -> PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=date]
+
+# ORDER BY and MULTIPLE WHERE PP 
+
+PP[SEM=<?pp>, TYPE=wherecolumn] -> PP[SEM=?pp, TYPE=orderby]
+PP[SEM=<?pp & ?pp1>, TYPE=wherecolumn] -> PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=orderby]
+PP[SEM=<?pp & ?pp1>, TYPE=date] -> PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=orderby]
+PP[SEM=<?pp & ?pp1 & ?pp2>, TYPE=date] -> PP[SEM=?pp, TYPE=wherecolumn] PP[SEM=?pp1, TYPE=date] PP[SEM=?pp2, TYPE=orderby]
+PP[SEM=<?pp & ?pp1 & ?pp2>, TYPE=date] -> PP[SEM=?pp, TYPE=date] PP[SEM=?pp1, TYPE=wherecolumn] PP[SEM=?pp2, TYPE=orderby]
+
+PP[SEM=<?gerundv(?nn)>, TYPE=orderby] -> P[TYPE=in] GERUNDV[SEM=?gerundv, TYPE=orderby] NN[SEM=?nn, TYPE=selectcolumn]
+PP[SEM=<?gerundv(?nn)>, TYPE=orderby] -> P[TYPE=in] GERUNDV[SEM=?gerundv, TYPE=orderby] NN[SEM=?nn, TYPE=selectcolumn]
+
+PP[SEM=<?v(?nn)>, TYPE=orderby] -> V[SEM=?v, TYPE=orderbydefault] NN[SEM=?nn, TYPE=selectcolumn]
+PP[SEM=<?v(?nn)(?o)>, TYPE=orderby] -> V[SEM=?v, TYPE=orderby] NN[SEM=?nn, TYPE=selectcolumn] ORD[TYPE=orderby, SEM=?o]
+
+
+#
+# Lexicons(v0.2)
+#
+CONJ[] -> 'and'
+P[TYPE=for] -> 'for'
+P[TYPE=of] -> 'of'
+P[TYPE=from] -> 'from' | 'after'
+P[TYPE=by] -> 'by'
+P[TYPE=to] -> 'to' | 'before'
+P[TYPE=in] -> 'in'
+
+ORD[TYPE=ordtop] -> 'top'
+ORD[TYPE=orderby, SEM=<ASC>] -> 'lowest first' | 'increasing' | 'ascending'
+ORD[TYPE=orderby, SEM=<DESC>]  -> 'highest first' | 'decreasing' | 'descending'
+
+
+GERUNDV[TYPE=orderby, SEM=<\x.orderby(ASC,x)>] -> 'increasing order of'
+GERUNDV[TYPE=orderby, SEM=<\x.orderby(DESC,x)>] -> 'decreasing order of'
+
+ADV[TYPE=groupby, SEM=<\x.groupby(x)>] -> 'each' | 'every' | 'each and every'
+
+ADJ[TYPE=mean, SEM=<\x.AVG(x)>] -> 'mean' | 'average' | 'avg'
+ADJ[TYPE=max, SEM=<\x.MAX(x)>] -> 'maximum' | 'max' 
+ADJ[TYPE=min, SEM=<\x.MIN(x)>] -> 'minimum' | 'min' 
+ADJ[TYPE=sum, SEM=<\x.SUM(x)>] -> 'sum of' | 'total of' | 'total'
+ADJ[TYPE=count, SEM=<\x.COUNT(x)>] -> 'total number of' | 'count of'
+ADJ[TYPE=count, SEM=<\x.DISTINCT(x)>] -> 'unique' | 'distinct' 
+
+NN[TYPE=table, NUM=pl, SEM=<\x.timesheet(x)>] -> 'timesheet records' | 'timesheet' | 'timesheet table'
+NN[TYPE=wherecolumn, NUM=sg] -> 'date'
+NN[TYPE=wherecolumn, NUM=sg, SEM=<\x.company(company_name_column,x)>] -> 'company name' | 'company'
+NN[TYPE=wherecolumn, NUM=sg, SEM=<\x.employeeid(employee_id_column,x)>] -> 'employee id'
+NN[TYPE=wherecolumn, NUM=pl, SEM=<\x.workhours(work_hour_column,x)>] -> 'work hours'
+NN[TYPE=wherecolumn, NUM=sg, SEM=<\x.employeename(employee_name_column,x)>] -> 'employee' | 'employee name'
+NN[TYPE=wherecolumn, NUM=sg, SEM=<\x.project(project_name_column,x)>] -> 'project name' | 'project'
+
+NN[TYPE=selectcolumn, NUM=sg, SEM=<date_column>] -> 'date'
+NN[TYPE=selectcolumn, NUM=sg, SEM=<company_name_column>] -> 'company name' | 'company'
+NN[TYPE=selectcolumn, NUM=sg, SEM=<employee_id_column>] -> 'employee id'
+NN[TYPE=selectcolumn, NUM=pl, SEM=<work_hour_column>] -> 'work hours' 
+NN[TYPE=selectcolumn, NUM=sg, SEM=<employee_name_column>] -> 'employee' | 'employee name'
+NN[TYPE=selectcolumn, NUM=sg, SEM=<project_name_column>] -> 'project name' | 'project'
+
+NN[NUM=pl, TYPE=records] -> 'records' | 'entries' | 'rows'
+
+V[TYPE=selectsomewhere, TNS=PRES, SEM=<\r P q.all x.(P(x) & r -> q)>] -> 'show' | 'return' | 'show me' | 'tell me' | 'find'
+V[TYPE=selectsomenowhere, TNS=PRES, SEM=<\r P.all x.(P(x) & r)>] -> 'show' | 'return' | 'show me' | 'tell me' | 'find'
+V[TYPE=selectstar, TNS=PRES, SEM=<\P q.all x.(P(x) -> q)>] -> 'show' | 'return' | 'show me' | 'tell me' | 'find'
+V[TYPE=simple, TNS=PRES, SEM=<\P.all x.P(x)>] -> 'show' | 'return' | 'show me' | 'tell me' | 'find'
+
+V[TYPE=orderbydefault, TNS=SIMPLEPAST, SEM=<\x.orderby(ASC,x)>] -> 'ordered by' | 'sorted by'
+V[TYPE=orderby, TNS=SIMPLEPAST, SEM=<\x y.orderby(y,x)>] -> 'ordered by' | 'sorted by'
+
+#
+# Will be dynamically generated (Uncomment this while running testing.py)
+#
+
+#PropN[TYPE=variable, SEM=<\P.P('andy')>] -> 'andy'
+#PropN[TYPE=variable, SEM=<\P.P('soli')>] -> 'soli'
+#PropN[TYPE=variable, SEM=<\P.P('ws174')>] -> 'ws174'
+#PropN[TYPE=date, SEM=<\P.P('d1')>] -> 'd1'
+#PropN[TYPE=date, SEM=<\P.P('d2')>] -> 'd2'
+#PropN[TYPE=number, SEM=<\P.P('10')>] -> '10'
+#
+#GERUNDV[TYPE=orderby, SEM=<\x.orderby(ASC,x)>] -> 'increasing' 'order' 'of'
+#GERUNDV[TYPE=orderby, SEM=<\x.orderby(DESC,x)>] -> 'decreasing' 'order' 'of'
+#
+#ADV[TYPE=groupby, SEM=<\x.groupby(x)>] -> 'each' | 'every' | 'each' 'and' 'every'
+#
+#ADJ[TYPE=mean, SEM=<\x.AVG(x)>] -> 'mean' | 'average' | 'avg'
+#ADJ[TYPE=max, SEM=<\x.MAX(x)>] -> 'maximum' | 'max' 
+#ADJ[TYPE=min, SEM=<\x.MIN(x)>] -> 'minimum' | 'min' 
+#ADJ[TYPE=sum, SEM=<\x.SUM(x)>] -> 'sum' 'of' | 'total' 'of' | 'total'
+#ADJ[TYPE=count, SEM=<\x.COUNT(x)>] -> 'total' 'number' 'of' | 'count' 'of'
+#ADJ[TYPE=count, SEM=<\x.DISTINCT(x)>] -> 'unique' | 'distinct' 
+#
+#NN[TYPE=table, NUM=pl, SEM=<\x.timesheet(x)>] -> 'timesheet' 'records' | 'timesheet' | 'timesheet' 'table'
+#NN[TYPE=wherecolumn, NUM=sg] -> 'date'
+#NN[TYPE=wherecolumn, NUM=sg, SEM=<\x.company(company_name_column,x)>] -> 'company' 'name' | 'company'
+#NN[TYPE=wherecolumn, NUM=sg, SEM=<\x.employeeid(employee_id_column,x)>] -> 'employee' 'id'
+#NN[TYPE=wherecolumn, NUM=pl, SEM=<\x.workhours(work_hour_column,x)>] -> 'work' 'hours'
+#NN[TYPE=wherecolumn, NUM=sg, SEM=<\x.employeename(employee_name_column,x)>] -> 'employee' | 'employee' 'name'
+#NN[TYPE=wherecolumn, NUM=sg, SEM=<\x.project(project_name_column,x)>] -> 'project' 'name' | 'project'
+#
+#NN[TYPE=selectcolumn, NUM=sg, SEM=<date_column>] -> 'date'
+#NN[TYPE=selectcolumn, NUM=sg, SEM=<company_name_column>] -> 'company' 'name' | 'company'
+#NN[TYPE=selectcolumn, NUM=sg, SEM=<employee_id_column>] -> 'employee' 'id'
+#NN[TYPE=selectcolumn, NUM=pl, SEM=<work_hour_column>] -> 'work' 'hours' 
+#NN[TYPE=selectcolumn, NUM=sg, SEM=<employee_name_column>] -> 'employee' | 'employee' 'name'
+#NN[TYPE=selectcolumn, NUM=sg, SEM=<project_name_column>] -> 'project' 'name' | 'project'
+#
+#NN[NUM=pl, TYPE=records] -> 'records' | 'entries' | 'rows'
+#
+#V[TYPE=selectsomewhere, TNS=PRES, SEM=<\r P q.all x.(P(x) & r -> q)>] -> 'show' | 'return' | 'show' 'me' | 'tell' 'me' | 'find'
+#V[TYPE=selectsomenowhere, TNS=PRES, SEM=<\r P.all x.(P(x) & r)>] -> 'show' | 'return' | 'show' 'me' | 'tell' 'me' | 'find'
+#V[TYPE=selectstar, TNS=PRES, SEM=<\P q.all x.(P(x) -> q)>] -> 'show' | 'return' | 'show' 'me' | 'tell' 'me' | 'find'
+#V[TYPE=simple, TNS=PRES, SEM=<\P.all x.P(x)>] -> 'show' | 'return' | 'show' 'me' | 'tell' 'me' | 'find'
